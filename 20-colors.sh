@@ -1,39 +1,37 @@
 #!/bin/bash
 
-USER_ID=$(id -u)
-LOG_FOLDER=/var/log/installation
-LOG_FILE=/var/log/installation/$0.log
+USERID=$(id -u)
+LOGS_FOLDER="/var/log/shell-script"
+LOGS_FILE="/var/log/shell-script/$0.log"
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-mkdir -p $LOG_FOLDER
-
-
-if [ $USER_ID -ne 0 ]; then
-    echo -e "$R Kindly run this script $N with $G root $N user access" | tee -a $LOG_FILE
+if [ $USERID -ne 0 ]; then
+    echo -e "$R Please run this script with root user access $N" | tee -a $LOGS_FILE
     exit 1
 fi
 
-VERIFY(){
+mkdir -p $LOGS_FOLDER
+
+VALIDATE(){
     if [ $1 -ne 0 ]; then
-        echo "Installing $2 Failed" | tee -a $LOG_FILE
+        echo -e "$2 ... $R FAILURE $N" | tee -a $LOGS_FILE
         exit 1
     else
-        echo "Installing $2 Success" | tee -a $LOG_FILE
-    fi  
-    
+        echo -e "$2 ... $G SUCCESS $N" | tee -a $LOGS_FILE
+    fi
 }
 
-for package in $@
+for package in $@ # sudo sh 14-loops.sh nginx mysql nodejs
 do
-    dnf list installed $package
+    dnf list installed $package &>>$LOGS_FILE
     if [ $? -ne 0 ]; then
-        echo "$R Installing $package $N"
-        dnf install $package -y &>> $LOG_FILE
-        VERIFY $? "$package"
+        echo "$package not installed, installing now"
+        dnf install $package -y &>>$LOGS_FILE
+        VALIDATE $? "$package installation"
     else
-        echo "$package already installed, $Y Skipping $N"
+        echo -e "$package already installed ... $Y SKIPPING $N"
     fi
 done
