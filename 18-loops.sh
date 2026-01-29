@@ -24,7 +24,7 @@ VERIFY(){
 
 for package in $@
 do
-    dng list installed $package
+    dnf list installed $package
     if [ $? -ne 0 ]; then
         echo "Installing $package"
         dnf install $package -y &>> $LOG_FILE
