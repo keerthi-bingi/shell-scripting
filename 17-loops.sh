@@ -25,5 +25,5 @@ VERIFY(){
 for package in $@
 do
     dnf install $package -y &>> $LOG_FILE
-    VERIFY $? "$package Installation"
+    VERIFY $? "$package"
 done
