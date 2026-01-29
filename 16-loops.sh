@@ -2,5 +2,8 @@
 
 for i in {1..100}
 do
-    echo $i
+  NUM=$(($i % 2))
+  if [ $NUM -eq 0 ]; then
+  echo $i
+  fi
 done
