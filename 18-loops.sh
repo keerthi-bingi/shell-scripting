@@ -31,5 +31,5 @@ do
         VERIFY $? "$package"
     else
         echo "$package already installed, Skipping"
-
+    fi
 done
