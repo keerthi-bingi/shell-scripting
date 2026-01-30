@@ -27,5 +27,5 @@ do
             --output text
         )   
     fi
-    echo "IP Address: $IP"
+    echo "IP Address: $instance $IP"
  done
